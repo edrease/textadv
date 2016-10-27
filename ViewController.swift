@@ -228,7 +228,7 @@ class ViewController: UIViewController {
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.addSubview(closeButton)
         
-        GlowEffect.addToButton(button: closeButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: closeButton)
         
         let closeButtonVerticalConstraint = NSLayoutConstraint(item: closeButton, attribute: .centerY, relatedBy: .equal, toItem: backgroundView, attribute: .centerY, multiplier: 1.9, constant: 0)
         let closeButtonHorizontalConstraint = NSLayoutConstraint(item: closeButton, attribute: .centerX, relatedBy: .equal, toItem: backgroundView, attribute: .centerX, multiplier: 1, constant: 0)
@@ -260,7 +260,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(observeButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: observeButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: observeButton)
         
         let observeButtonVerticalConstraint = NSLayoutConstraint(item: observeButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 0.5, constant: 0)
         let observeButtonHorizontalConstraint = NSLayoutConstraint(item: observeButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 0.5, constant: 0)
@@ -279,7 +279,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(talkButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: talkButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: talkButton)
         
         let talkButtonVerticalConstraint = NSLayoutConstraint(item: talkButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 1.0, constant: 0)
         let talkButtonHorizontalConstraint = NSLayoutConstraint(item: talkButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 0.5, constant: 0)
@@ -298,7 +298,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(moveButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: moveButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: moveButton)
         
         let moveButtonVerticalConstraint = NSLayoutConstraint(item: moveButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 1.5, constant: 0)
         let moveButtonHorizontalConstraint = NSLayoutConstraint(item: moveButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 0.5, constant: 0)
@@ -317,7 +317,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(interactButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: interactButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: interactButton)
         
         let interactButtonVerticalConstraint = NSLayoutConstraint(item: interactButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 0.5, constant: 0)
         let interactButtonHorizontalConstraint = NSLayoutConstraint(item: interactButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 1.5, constant: 0)
@@ -336,7 +336,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(attackButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: attackButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: attackButton)
         
         let attackButtonVerticalConstraint = NSLayoutConstraint(item: attackButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 1.0, constant: 0)
         let attackButtonHorizontalConstraint = NSLayoutConstraint(item: attackButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 1.5, constant: 0)
@@ -355,7 +355,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(itemButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: itemButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: itemButton)
         
         let itemButtonVerticalConstraint = NSLayoutConstraint(item: itemButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 1.5, constant: 0)
         let itemButtonHorizontalConstraint = NSLayoutConstraint(item: itemButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 1.5, constant: 0)
@@ -464,7 +464,7 @@ class ViewController: UIViewController {
         
         actionSubview.addSubview(cancelButton)
         
-        GlowEffect.addToButton(button: cancelButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: cancelButton)
         
         let cancelButtonVerticalConstraint = NSLayoutConstraint(item: cancelButton, attribute: .centerY, relatedBy: .equal, toItem: actionSubview, attribute: .centerY, multiplier: 1.8, constant: 0)
         let cancelButtonHorizontalConstraint = NSLayoutConstraint(item: cancelButton, attribute: .centerX, relatedBy: .equal, toItem: actionSubview, attribute: .centerX, multiplier: 1, constant: 0)
@@ -559,7 +559,7 @@ class ViewController: UIViewController {
                 
                 actionView.addSubview(firstOptionButton)
                 
-                GlowEffect.addToButton(button: firstOptionButton, color: self.appleIIcolor.cgColor)
+                GlowEffect.addToButton(button: firstOptionButton)
                 
                 let firstOptionButtonVerticalConstraint = NSLayoutConstraint(item: firstOptionButton, attribute: .centerY, relatedBy: .equal, toItem: actionView, attribute: .centerY, multiplier: 0.3, constant: 0)
                 let firstOptionButtonLeftConstraint = NSLayoutConstraint(item: firstOptionButton, attribute: .left, relatedBy: .equal, toItem: actionView, attribute: .left, multiplier: 1, constant: -8)
@@ -586,7 +586,7 @@ class ViewController: UIViewController {
                 
                 actionView.addSubview(optionButton)
                 
-                GlowEffect.addToButton(button: optionButton, color: self.appleIIcolor.cgColor)
+                GlowEffect.addToButton(button: optionButton)
                 
                 let optionButtonVerticalConstraint = NSLayoutConstraint(item: optionButton, attribute: .top, relatedBy: .equal, toItem: anchorButton, attribute: .bottom, multiplier: 1, constant: 24)
                 let optionButtonLeftConstraint = NSLayoutConstraint(item: optionButton, attribute: .left, relatedBy: .equal, toItem: actionView, attribute: .left, multiplier: 1, constant: -8)
@@ -613,7 +613,7 @@ class ViewController: UIViewController {
             
             actionView.addSubview(nextButton)
             
-            GlowEffect.addToButton(button: nextButton, color: self.appleIIcolor.cgColor)
+            GlowEffect.addToButton(button: nextButton)
             
             let nextButtonVerticalConstraint = NSLayoutConstraint(item: nextButton, attribute: .centerY, relatedBy: .equal, toItem: actionView, attribute: .centerY, multiplier: 1.8, constant: 0)
             let nextButtonHorizontalConstraint = NSLayoutConstraint(item: nextButton, attribute: .centerX, relatedBy: .equal, toItem: actionView, attribute: .centerX, multiplier: 1.75, constant: 0)
@@ -636,7 +636,7 @@ class ViewController: UIViewController {
             
             actionView.addSubview(prevButton)
             
-            GlowEffect.addToButton(button: prevButton, color: self.appleIIcolor.cgColor)
+            GlowEffect.addToButton(button: prevButton)
             
             let prevButtonVerticalConstraint = NSLayoutConstraint(item: prevButton, attribute: .centerY, relatedBy: .equal, toItem: actionView, attribute: .centerY, multiplier: 1.8, constant: 0)
             let prevButtonHorizontalConstraint = NSLayoutConstraint(item: prevButton, attribute: .centerX, relatedBy: .equal, toItem: actionView, attribute: .centerX, multiplier: 0.25, constant: 0)
@@ -685,7 +685,7 @@ class ViewController: UIViewController {
             
             superview.addSubview(nextButton)
             
-            GlowEffect.addToButton(button: nextButton, color: self.appleIIcolor.cgColor)
+            GlowEffect.addToButton(button: nextButton)
             
             let nextButtonVerticalConstraint = NSLayoutConstraint(item: nextButton, attribute: .centerY, relatedBy: .equal, toItem: superview, attribute: .centerY, multiplier: 1.8, constant: 0)
             let nextButtonHorizontalConstraint = NSLayoutConstraint(item: nextButton, attribute: .centerX, relatedBy: .equal, toItem: superview, attribute: .centerX, multiplier: 1.75, constant: 0)
@@ -710,7 +710,7 @@ class ViewController: UIViewController {
         
         superview.addSubview(logButton)
         
-        GlowEffect.addToButton(button: logButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: logButton)
         
         let logButtonVerticalConstraint = NSLayoutConstraint(item: logButton, attribute: .centerY, relatedBy: .equal, toItem: superview, attribute: .centerY, multiplier: 1.8, constant: 0)
         let logButtonHorizontalConstraint = NSLayoutConstraint(item: logButton, attribute: .centerX, relatedBy: .equal, toItem: superview, attribute: .centerX, multiplier: 1.75, constant: 0)

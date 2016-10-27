@@ -42,10 +42,10 @@ class MissionCreator {
         let demoMission: Mission = Mission(missionName: "Demo Mission",
                                            briefing: ["Environment" : "Office Building"],
                                            rooms: missionRooms,
-                                           disguiseOptions: ["Blond wig", "Boss replica mask", "Fake beard"],
-                                           weaponOptions: ["Gun", "Pen", "Dagger"],
-                                           gadgetOptions: ["Mirror sunglass", "Voice thrower"],
-                                           statusItemOptions: ["Fake death pill"])
+                                           disguiseOptions: ["old man makeup", "blonde bombshell", "porter"],
+                                           weaponOptions: ["dagger", "pen w/ sleep dart", "heavy glove"],
+                                           gadgetOptions: ["mirror sunglass", "voice thrower", "tie clip taser"],
+                                           statusItemOptions: ["sedative", "amphetamine", "psychedelic pill"])
         
         return demoMission
     }
