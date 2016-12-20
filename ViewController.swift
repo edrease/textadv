@@ -47,11 +47,17 @@ class ViewController: UIViewController {
     
     var missionLog: [String] = []
     
+    var player: Player!
+    var items: [String] = []
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+    }
+    
 //MARK: Life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         
         //Set INFO VIEW and ACTION VIEW border color and border width
         //let greenBorderColor = UIColor(red: 0.0, green: 80.0, blue: 0.0, alpha: 1)
@@ -78,13 +84,10 @@ class ViewController: UIViewController {
         //Add glow effect to room underline label
         GlowEffect.addToLabel(label: self.roomUnderlineLabel)
         
-        //Create and assign CURRENT MISSION
-        self.currentMission = MissionCreator.createDemoMission()
-        
         //Assign current mission and current array
-        self.currentRoom = self.currentMission.rooms[0]
+        self.currentRoom = self.currentMission.initialRoom
         self.roomNameLabel.text = self.currentRoom.name
-        self.currentArray = self.currentMission.rooms[0].description
+        self.currentArray = self.currentMission.initialRoom.description
         self.infoTextLabel.text = self.currentArray[0]
         
         //Set up and add tap gesture to INFO TEXT VIEW to see next label
@@ -104,6 +107,10 @@ class ViewController: UIViewController {
         
         self.actionListView.addSubview(self.actionViewMask)
         self.placeLogButton(self.infoTextView)
+        
+        self.player.items.append(player.gadget)
+        self.player.items.append(player.statusEffectItem)
+        self.player.items.append(player.disguise)
         
     }
 
@@ -154,7 +161,9 @@ class ViewController: UIViewController {
         
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
+            self.actionSheetCounter = 0
             self.infoTextCounter = 1
+            self.actions = []
             self.toggleActionViewMask()
         }
     }
@@ -386,7 +395,7 @@ class ViewController: UIViewController {
         let subview = setupActionView(self.actionListView)
         subview.tag = 99
         
-        let talkOptions = ["Talk to yourself", "Do vocal exercise", "Scream like toddler that is avoiding bath"]
+        let talkOptions = self.currentRoom.talkOptions
         self.placeActionButtons(talkOptions, actionView: subview)
     }
     
@@ -397,7 +406,7 @@ class ViewController: UIViewController {
         let subview = setupActionView(self.actionListView)
         subview.tag = 99
         
-        let moveOptions = ["Unmarked door to left", "Door to Boss' office"]
+        let moveOptions = self.currentRoom.roomExits
         self.placeActionButtons(moveOptions, actionView: subview)
     }
     
@@ -419,7 +428,7 @@ class ViewController: UIViewController {
         let subview = setupActionView(self.actionListView)
         subview.tag = 99
 
-        let attackOptions = ["Yourself", "Chair in corner"]
+        let attackOptions = self.currentRoom.attackOptions
         self.placeActionButtons(attackOptions, actionView: subview)
     }
     
@@ -430,8 +439,7 @@ class ViewController: UIViewController {
         let subview = setupActionView(self.actionListView)
         subview.tag = 99
         
-        let itemOptions = ["fake death pill", "fancy pen", "sunglass with mirror", "magazine", "rubber ball", "pencil", "candy bar", "cyanide pill", "novel", "receipt", "car keys", "prototype mobile phone", "luger", "foreign currency", "miniature playing cards"]
-        self.placeActionButtons(itemOptions, actionView: subview)
+        self.placeActionButtons(self.player.items, actionView: subview)
     }
     
     //Set up subview for when action button is pressed
@@ -481,6 +489,7 @@ class ViewController: UIViewController {
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
             self.actionSheetCounter = 0
+            self.actions = []
             self.didReturnFromPrevButton = false
         }
     }

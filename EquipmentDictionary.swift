@@ -10,9 +10,9 @@ import Foundation
 
 class EquipmentDictionary {
     
-    let equipment = ["mirror sunglass" : "DESCRIPTION: Sunglasses with a small mirror in the lens. Allows the user to view behind them without actually turning around",
-        "voice thrower" : "DESCRIPTION: Confuse adversaries by throwing your voice to another area",
-        "tie clip taser" : "DESCRIPTION: Use this to shock and incapacitate enemies",
+    let equipment = ["thermal sunglass" : "DESCRIPTION: Sunglasses that can detect heat signatures. People with something to hide could have a higher temperature.",
+        "wristwatch lockpick" : "DESCRIPTION: A lockpicking kit hidden into a watch. The watch hands can extrude outward and can be inserted into most locks with keyholes.",
+        "magnet boot" : "DESCRIPTION: Normal looking Oxford boots, but with strong magnets in the soles that can be switched on. Use to climb or grip metal surfaces better, but beware of losing battery power.",
         
         "dagger" : "DESCRIPTION: A small shiv. Easy to use and quiet, but messy...",
         "pen w/ sleep dart" : "DESCRIPTION: A pen that can shoot sleep darts. Extremely effective, but only at close range",

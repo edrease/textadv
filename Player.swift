@@ -25,4 +25,14 @@ class Player {
         self.disguise = disguise
         self.status = status
     }
+    
+    func checkForItem(item: String) -> Bool {
+        
+        for itemToCheck in self.items {
+            if item == itemToCheck {
+                return true
+            }
+        }
+        return false
+    }
 }

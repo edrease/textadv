@@ -33,4 +33,37 @@ class Constants {
     static let kPictureOfMen = "picture of men"
     
     
+//MARK: Mission One
+    
+    //OBSERVE
+    static let kObserveTrainCars = "train cars"
+    static let kObserveOldLadyLuggage = "old lady's luggage"
+    static let kObserveTrashCan = "trash can"
+    
+    //INTERACT
+    static let kInteractTrashCan = "trash can"
+    
+    //TALK
+    static let kTalkTicketSeller = "ticket seller"
+    static let kTalkDog = "dog"
+    static let kTalkYoungMan = "young man"
+    static let kTalkPorter = "porter"
+    
+    //ATTACK
+    static let kAttackPorter = "porter"
+    
+    //MOVE
+    static let kMoveBoardTrain = "board train"
+    static let kMoveControlCabin = "control cabin"
+    static let kMoveEngineCar = "engine room"
+    static let kMoveBaggageCar = "baggage car"
+    static let kMoveCoachCar1 = "coach car 1"
+    static let kMoveCoachCar2 = "coach car 2"
+    static let kMoveCoachCar3 = "coach car 3"
+    static let kMoveDiningCar = "dining car"
+    static let kMoveBarCar = "bar car"
+    static let kMoveSleepingCar1 = "sleeping car 1"
+    static let kMoveSleepingCar2 = "sleeping car 2"
+    static let kMoveObservationCar = "observation car"
+    
 }

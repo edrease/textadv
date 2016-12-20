@@ -18,6 +18,7 @@ class MissionStartViewController: UIViewController {
     var chooseWeaponView: UIView!
     var chooseMedicineView: UIView!
     var chooseDisguiseView: UIView!
+    var confirmAndStartView: UIView!
     
     var equipmentDescriptionLabel: UILabel!
     var gadgetDescriptionLabel: UILabel?
@@ -65,11 +66,17 @@ class MissionStartViewController: UIViewController {
     var medicineViewNextButtonPlaced: Bool = false
     var disguiseViewNextButtonPlaced: Bool = false
     
+    // Confirm view labels
+    var confirmViewGadgetLabel = UILabel()
+    var confirmViewWeaponLabel = UILabel()
+    var confirmViewMedicineLabel = UILabel()
+    var confirmViewDisguiseLabel = UILabel()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.mission = MissionCreator.createDemoMission()
+        //self.mission = MissionCreator.createDemoMission()
         
         // Add gadget buttons to array
         self.gadgetButtons.append(self.gadgetButtonOne)
@@ -99,7 +106,7 @@ class MissionStartViewController: UIViewController {
         self.chooseWeaponView = self.createEquipmentSelectionView(selectionType: "WEAPON")
         self.chooseMedicineView = self.createEquipmentSelectionView(selectionType: "MEDICINE")
         self.chooseDisguiseView = self.createEquipmentSelectionView(selectionType: "DISGUISE")
-    
+        self.confirmAndStartView = self.createConfirmView()
         
         //Add views to array
         self.views.append(self.missionSplashScreen)
@@ -109,6 +116,7 @@ class MissionStartViewController: UIViewController {
         self.views.append(self.chooseWeaponView)
         self.views.append(self.chooseMedicineView)
         self.views.append(self.chooseDisguiseView)
+        self.views.append(self.confirmAndStartView)
         
         //Test view
         self.view.addSubview(self.views[1])
@@ -257,6 +265,29 @@ class MissionStartViewController: UIViewController {
         return view
     }
     
+    // Create confirm and start mission screen
+    func createConfirmView() -> UIView {
+        let view = UIView(frame: self.view.frame)
+        let topLabel = UILabel()
+        let topLabelText = "Confirm equipment and begin mission."
+        self.setupLongLabel(label: topLabel, labelText: topLabelText, superview: view, yMultiplier: 0.2)
+        
+        self.setupLongLabel(label: self.confirmViewGadgetLabel, labelText: "", superview: view, yMultiplier: 0.4)
+        self.setupLongLabel(label: self.confirmViewWeaponLabel, labelText: "", superview: view, yMultiplier: 0.5)
+        self.setupLongLabel(label: self.confirmViewMedicineLabel, labelText: "", superview: view, yMultiplier: 0.6)
+        self.setupLongLabel(label: self.confirmViewDisguiseLabel, labelText: "", superview: view, yMultiplier: 0.7)
+        
+        let prevButton = UIButton(type: .custom)
+        self.setupButton(button: prevButton, superview: view, buttonText: "PREV", yMultiplier: 1.8, xMultiplier: 0.2)
+        prevButton.addTarget(self, action: #selector(prevButtonPressed), for: .touchUpInside)
+        
+        let deployButton = UIButton(type: .custom)
+        self.setupButton(button: deployButton, superview: view, buttonText: "BEGIN", yMultiplier: 1.8, xMultiplier: 1.8)
+        deployButton.addTarget(self, action: #selector(deployButtonPressed), for: .touchUpInside)
+        
+        return view
+    }
+    
 //MARK: Helper functions
     
     //Configures label
@@ -317,6 +348,11 @@ class MissionStartViewController: UIViewController {
         
         superview.addConstraint(buttonVerticalConstraint)
         superview.addConstraint(buttonHorizontalConstraint)
+    }
+    
+    func deployButtonPressed() {
+        
+        performSegue(withIdentifier: "ToActionViewController", sender: self)
     }
     
     //Setup for equipment option button
@@ -439,6 +475,12 @@ class MissionStartViewController: UIViewController {
         case 6:
             currentViewNextButtonPlaced = self.disguiseViewNextButtonPlaced
             self.player.disguise = sender.titleLabel!.text!
+            
+            self.confirmViewGadgetLabel.text = "GADGET: \(self.player.gadget)"
+            self.confirmViewWeaponLabel.text = "WEAPON: \(self.player.weapon)"
+            self.confirmViewMedicineLabel.text = "MEDICINE: \(self.player.statusEffectItem)"
+            self.confirmViewDisguiseLabel.text = "DISGUISE: \(self.player.disguise)"
+            
         default:
             currentViewNextButtonPlaced = false
         }
@@ -485,6 +527,7 @@ class MissionStartViewController: UIViewController {
         case 6:
             // Set label to disguise selection screen
             label = self.disguiseDescriptionLabel
+            
         case 7:
             print("SCEEN SEVEN")
         default:
@@ -496,6 +539,15 @@ class MissionStartViewController: UIViewController {
         for key in equipmentDictionary.equipment.keys {
             if key == buttonPressed.titleLabel?.text {
                 label!.text = equipmentDictionary.equipment[key]
+            }
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ToActionViewController" {
+            if let vc = segue.destination as? ViewController {
+                vc.currentMission = self.mission
+                vc.player = self.player
             }
         }
     }
