@@ -31,6 +31,7 @@ class ViewController: UIViewController {
     
     var infoTextCounter = 1
     var actionService = ActionService()
+    let actionServiceDictionaries = ActionServiceDictionaries()
     
     var actionSheetCounter = 0
     var actions: [[String]] = []
@@ -47,11 +48,30 @@ class ViewController: UIViewController {
     
     var missionLog: [String] = []
     
+    var player: Player!
+    var items: [String] = []
+    
+    var actionsRemaining: Int = 0
+    
+    //Placeholders for puzzles - can be used in a number of ways depending on the mission
+    var numberOne: Int = 0
+    var numberTwo: Int = 0
+    var numberThree: Int = 0
+    var numberFour: Int = 0
+    
+    var switchOne: Bool = false
+    var switchTwo: Bool = false
+    var switchThree: Bool = false
+    var switchFour: Bool = false
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+    }
+    
 //MARK: Life cycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         
         //Set INFO VIEW and ACTION VIEW border color and border width
         //let greenBorderColor = UIColor(red: 0.0, green: 80.0, blue: 0.0, alpha: 1)
@@ -78,13 +98,10 @@ class ViewController: UIViewController {
         //Add glow effect to room underline label
         GlowEffect.addToLabel(label: self.roomUnderlineLabel)
         
-        //Create and assign CURRENT MISSION
-        self.currentMission = MissionCreator.createDemoMission()
-        
         //Assign current mission and current array
-        self.currentRoom = self.currentMission.rooms[0]
+        self.currentRoom = self.currentMission.initialRoom
         self.roomNameLabel.text = self.currentRoom.name
-        self.currentArray = self.currentMission.rooms[0].description
+        self.currentArray = self.currentMission.initialRoom.description
         self.infoTextLabel.text = self.currentArray[0]
         
         //Set up and add tap gesture to INFO TEXT VIEW to see next label
@@ -105,6 +122,9 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(self.actionViewMask)
         self.placeLogButton(self.infoTextView)
         
+        self.player.items.append(player.gadget)
+        self.player.items.append(player.statusEffectItem)
+        self.player.items.append(player.disguise)
     }
 
     override func didReceiveMemoryWarning() {
@@ -145,7 +165,6 @@ class ViewController: UIViewController {
                 self.currentArray = newArray!
                 self.infoTextLabel.text = self.currentArray[0]
                 FontColorService.determineFontColor(inputString: self.infoTextLabel)
-                //TODO: Make sure this is the right spot to add
                 self.missionLog.append(self.infoTextLabel.text!)
             }
         }
@@ -154,7 +173,9 @@ class ViewController: UIViewController {
         
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
+            self.actionSheetCounter = 0
             self.infoTextCounter = 1
+            self.actions = []
             self.toggleActionViewMask()
         }
     }
@@ -228,7 +249,7 @@ class ViewController: UIViewController {
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.addSubview(closeButton)
         
-        GlowEffect.addToButton(button: closeButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: closeButton)
         
         let closeButtonVerticalConstraint = NSLayoutConstraint(item: closeButton, attribute: .centerY, relatedBy: .equal, toItem: backgroundView, attribute: .centerY, multiplier: 1.9, constant: 0)
         let closeButtonHorizontalConstraint = NSLayoutConstraint(item: closeButton, attribute: .centerX, relatedBy: .equal, toItem: backgroundView, attribute: .centerX, multiplier: 1, constant: 0)
@@ -260,7 +281,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(observeButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: observeButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: observeButton)
         
         let observeButtonVerticalConstraint = NSLayoutConstraint(item: observeButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 0.5, constant: 0)
         let observeButtonHorizontalConstraint = NSLayoutConstraint(item: observeButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 0.5, constant: 0)
@@ -279,7 +300,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(talkButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: talkButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: talkButton)
         
         let talkButtonVerticalConstraint = NSLayoutConstraint(item: talkButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 1.0, constant: 0)
         let talkButtonHorizontalConstraint = NSLayoutConstraint(item: talkButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 0.5, constant: 0)
@@ -298,7 +319,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(moveButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: moveButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: moveButton)
         
         let moveButtonVerticalConstraint = NSLayoutConstraint(item: moveButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 1.5, constant: 0)
         let moveButtonHorizontalConstraint = NSLayoutConstraint(item: moveButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 0.5, constant: 0)
@@ -317,7 +338,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(interactButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: interactButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: interactButton)
         
         let interactButtonVerticalConstraint = NSLayoutConstraint(item: interactButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 0.5, constant: 0)
         let interactButtonHorizontalConstraint = NSLayoutConstraint(item: interactButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 1.5, constant: 0)
@@ -336,7 +357,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(attackButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: attackButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: attackButton)
         
         let attackButtonVerticalConstraint = NSLayoutConstraint(item: attackButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 1.0, constant: 0)
         let attackButtonHorizontalConstraint = NSLayoutConstraint(item: attackButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 1.5, constant: 0)
@@ -355,7 +376,7 @@ class ViewController: UIViewController {
         self.actionListView.addSubview(itemButton)
         
         //Add glow effect to button text
-        GlowEffect.addToButton(button: itemButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: itemButton)
         
         let itemButtonVerticalConstraint = NSLayoutConstraint(item: itemButton, attribute: .centerY, relatedBy: .equal, toItem: self.actionListView, attribute: .centerY, multiplier: 1.5, constant: 0)
         let itemButtonHorizontalConstraint = NSLayoutConstraint(item: itemButton, attribute: .centerX, relatedBy: .equal, toItem: self.actionListView, attribute: .centerX, multiplier: 1.5, constant: 0)
@@ -386,7 +407,7 @@ class ViewController: UIViewController {
         let subview = setupActionView(self.actionListView)
         subview.tag = 99
         
-        let talkOptions = ["Talk to yourself", "Do vocal exercise", "Scream like toddler that is avoiding bath"]
+        let talkOptions = self.currentRoom.talkOptions
         self.placeActionButtons(talkOptions, actionView: subview)
     }
     
@@ -397,7 +418,7 @@ class ViewController: UIViewController {
         let subview = setupActionView(self.actionListView)
         subview.tag = 99
         
-        let moveOptions = ["Unmarked door to left", "Door to Boss' office"]
+        let moveOptions = self.currentRoom.roomExits
         self.placeActionButtons(moveOptions, actionView: subview)
     }
     
@@ -419,7 +440,7 @@ class ViewController: UIViewController {
         let subview = setupActionView(self.actionListView)
         subview.tag = 99
 
-        let attackOptions = ["Yourself", "Chair in corner"]
+        let attackOptions = self.currentRoom.attackOptions
         self.placeActionButtons(attackOptions, actionView: subview)
     }
     
@@ -430,8 +451,7 @@ class ViewController: UIViewController {
         let subview = setupActionView(self.actionListView)
         subview.tag = 99
         
-        let itemOptions = ["fake death pill", "fancy pen", "sunglass with mirror", "magazine", "rubber ball", "pencil", "candy bar", "cyanide pill", "novel", "receipt", "car keys", "prototype mobile phone", "luger", "foreign currency", "miniature playing cards"]
-        self.placeActionButtons(itemOptions, actionView: subview)
+        self.placeActionButtons(self.player.items, actionView: subview)
     }
     
     //Set up subview for when action button is pressed
@@ -464,7 +484,7 @@ class ViewController: UIViewController {
         
         actionSubview.addSubview(cancelButton)
         
-        GlowEffect.addToButton(button: cancelButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: cancelButton)
         
         let cancelButtonVerticalConstraint = NSLayoutConstraint(item: cancelButton, attribute: .centerY, relatedBy: .equal, toItem: actionSubview, attribute: .centerY, multiplier: 1.8, constant: 0)
         let cancelButtonHorizontalConstraint = NSLayoutConstraint(item: cancelButton, attribute: .centerX, relatedBy: .equal, toItem: actionSubview, attribute: .centerX, multiplier: 1, constant: 0)
@@ -481,6 +501,7 @@ class ViewController: UIViewController {
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
             self.actionSheetCounter = 0
+            self.actions = []
             self.didReturnFromPrevButton = false
         }
     }
@@ -559,7 +580,7 @@ class ViewController: UIViewController {
                 
                 actionView.addSubview(firstOptionButton)
                 
-                GlowEffect.addToButton(button: firstOptionButton, color: self.appleIIcolor.cgColor)
+                GlowEffect.addToButton(button: firstOptionButton)
                 
                 let firstOptionButtonVerticalConstraint = NSLayoutConstraint(item: firstOptionButton, attribute: .centerY, relatedBy: .equal, toItem: actionView, attribute: .centerY, multiplier: 0.3, constant: 0)
                 let firstOptionButtonLeftConstraint = NSLayoutConstraint(item: firstOptionButton, attribute: .left, relatedBy: .equal, toItem: actionView, attribute: .left, multiplier: 1, constant: -8)
@@ -586,7 +607,7 @@ class ViewController: UIViewController {
                 
                 actionView.addSubview(optionButton)
                 
-                GlowEffect.addToButton(button: optionButton, color: self.appleIIcolor.cgColor)
+                GlowEffect.addToButton(button: optionButton)
                 
                 let optionButtonVerticalConstraint = NSLayoutConstraint(item: optionButton, attribute: .top, relatedBy: .equal, toItem: anchorButton, attribute: .bottom, multiplier: 1, constant: 24)
                 let optionButtonLeftConstraint = NSLayoutConstraint(item: optionButton, attribute: .left, relatedBy: .equal, toItem: actionView, attribute: .left, multiplier: 1, constant: -8)
@@ -613,7 +634,7 @@ class ViewController: UIViewController {
             
             actionView.addSubview(nextButton)
             
-            GlowEffect.addToButton(button: nextButton, color: self.appleIIcolor.cgColor)
+            GlowEffect.addToButton(button: nextButton)
             
             let nextButtonVerticalConstraint = NSLayoutConstraint(item: nextButton, attribute: .centerY, relatedBy: .equal, toItem: actionView, attribute: .centerY, multiplier: 1.8, constant: 0)
             let nextButtonHorizontalConstraint = NSLayoutConstraint(item: nextButton, attribute: .centerX, relatedBy: .equal, toItem: actionView, attribute: .centerX, multiplier: 1.75, constant: 0)
@@ -636,7 +657,7 @@ class ViewController: UIViewController {
             
             actionView.addSubview(prevButton)
             
-            GlowEffect.addToButton(button: prevButton, color: self.appleIIcolor.cgColor)
+            GlowEffect.addToButton(button: prevButton)
             
             let prevButtonVerticalConstraint = NSLayoutConstraint(item: prevButton, attribute: .centerY, relatedBy: .equal, toItem: actionView, attribute: .centerY, multiplier: 1.8, constant: 0)
             let prevButtonHorizontalConstraint = NSLayoutConstraint(item: prevButton, attribute: .centerX, relatedBy: .equal, toItem: actionView, attribute: .centerX, multiplier: 0.25, constant: 0)
@@ -685,7 +706,7 @@ class ViewController: UIViewController {
             
             superview.addSubview(nextButton)
             
-            GlowEffect.addToButton(button: nextButton, color: self.appleIIcolor.cgColor)
+            GlowEffect.addToButton(button: nextButton)
             
             let nextButtonVerticalConstraint = NSLayoutConstraint(item: nextButton, attribute: .centerY, relatedBy: .equal, toItem: superview, attribute: .centerY, multiplier: 1.8, constant: 0)
             let nextButtonHorizontalConstraint = NSLayoutConstraint(item: nextButton, attribute: .centerX, relatedBy: .equal, toItem: superview, attribute: .centerX, multiplier: 1.75, constant: 0)
@@ -710,7 +731,7 @@ class ViewController: UIViewController {
         
         superview.addSubview(logButton)
         
-        GlowEffect.addToButton(button: logButton, color: self.appleIIcolor.cgColor)
+        GlowEffect.addToButton(button: logButton)
         
         let logButtonVerticalConstraint = NSLayoutConstraint(item: logButton, attribute: .centerY, relatedBy: .equal, toItem: superview, attribute: .centerY, multiplier: 1.8, constant: 0)
         let logButtonHorizontalConstraint = NSLayoutConstraint(item: logButton, attribute: .centerX, relatedBy: .equal, toItem: superview, attribute: .centerX, multiplier: 1.75, constant: 0)

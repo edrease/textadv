@@ -16,12 +16,4 @@ class Constants {
     static let regularAppleFont = "PrintChar21"
     static let dragonQuestFont = "PressStart2P"
     
-//MARK: Mission 0
-    
-//Office hallway
-    
-    //OBSERVE
-    static let kCarpetStain = "carpet stain"
-    static let kPictureOfMen = "picture of men"
-    
 }

@@ -21,9 +21,11 @@ class GlowEffect {
         label.layer.masksToBounds = false
     }
     
-    class func addToButton(button: UIButton, color: CGColor) {
+    class func addToButton(button: UIButton) {
         
-        button.titleLabel?.layer.shadowColor = color
+        let color = button.titleColor(for: .normal)
+        
+        button.titleLabel?.layer.shadowColor = color!.cgColor
         button.titleLabel?.layer.shadowRadius = 5.0
         button.titleLabel?.layer.shadowOpacity = 0.9
         button.titleLabel?.layer.shadowOffset = CGSize.zero
@@ -34,6 +36,17 @@ class GlowEffect {
         
         view.layer.shadowColor = color
         view.layer.shadowRadius = 4.0
+        view.layer.shadowOpacity = 0.9
+        view.layer.shadowOffset = CGSize.zero
+        view.layer.masksToBounds = false
+    }
+    
+    class func addToView(view: UIView) {
+        
+        let color = view.backgroundColor
+        
+        view.layer.shadowColor = color?.cgColor
+        view.layer.shadowRadius = 2.0
         view.layer.shadowOpacity = 0.9
         view.layer.shadowOffset = CGSize.zero
         view.layer.masksToBounds = false

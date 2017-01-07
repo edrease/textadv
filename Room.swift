@@ -12,17 +12,22 @@ struct Room {
     
     var name: String
     var description: [String]
-    var roomExits: [Room]?
+    var roomExits: [String]
     var observeItems: [String]
     var interactItems: [String]
+    var talkOptions: [String]
+    var attackOptions: [String]
     
-    init(name: String, description: [String], roomExits: [Room]?, observeItems: [String], interactItems: [String]) {
+    init(name: String, description: [String], roomExits: [String], observeItems: [String], interactItems: [String], talkOptions: [String], attackOptions: [String]) {
         
         self.name = name
         self.description = description
         self.roomExits = roomExits
         self.observeItems = observeItems
         self.interactItems = interactItems
+        self.talkOptions = talkOptions
+        self.attackOptions = attackOptions
+        
     }
     
 }
