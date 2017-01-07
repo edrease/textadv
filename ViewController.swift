@@ -31,6 +31,7 @@ class ViewController: UIViewController {
     
     var infoTextCounter = 1
     var actionService = ActionService()
+    let actionServiceDictionaries = ActionServiceDictionaries()
     
     var actionSheetCounter = 0
     var actions: [[String]] = []
@@ -49,6 +50,19 @@ class ViewController: UIViewController {
     
     var player: Player!
     var items: [String] = []
+    
+    var actionsRemaining: Int = 0
+    
+    //Placeholders for puzzles - can be used in a number of ways depending on the mission
+    var numberOne: Int = 0
+    var numberTwo: Int = 0
+    var numberThree: Int = 0
+    var numberFour: Int = 0
+    
+    var switchOne: Bool = false
+    var switchTwo: Bool = false
+    var switchThree: Bool = false
+    var switchFour: Bool = false
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -111,7 +125,6 @@ class ViewController: UIViewController {
         self.player.items.append(player.gadget)
         self.player.items.append(player.statusEffectItem)
         self.player.items.append(player.disguise)
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -152,7 +165,6 @@ class ViewController: UIViewController {
                 self.currentArray = newArray!
                 self.infoTextLabel.text = self.currentArray[0]
                 FontColorService.determineFontColor(inputString: self.infoTextLabel)
-                //TODO: Make sure this is the right spot to add
                 self.missionLog.append(self.infoTextLabel.text!)
             }
         }

@@ -158,7 +158,7 @@ class MissionStartViewController: UIViewController {
         
         //Create and add detailed objective label
         let missionObjectiveLabel = UILabel()
-        missionObjectiveLabel.text = Constants.missionZeroObjective
+        missionObjectiveLabel.text = self.mission.briefing["objective"]
         missionObjectiveLabel.font = UIFont(name: Constants.regularAppleFont, size: 12.0)
         missionObjectiveLabel.textColor = self.appleIIFontColor
         missionObjectiveLabel.sizeToFit()
@@ -201,7 +201,7 @@ class MissionStartViewController: UIViewController {
         
         //Create and add detailed objective label
         let missionIntelLabel = UILabel()
-        self.setupLongLabel(label: missionIntelLabel, labelText: Constants.missionZeroIntel, superview: missionIntelView, yMultiplier: 0.8)
+        self.setupLongLabel(label: missionIntelLabel, labelText: self.mission.briefing["intel"]!, superview: missionIntelView, yMultiplier: 0.8)
         
         //Create and add NEXT button
         let nextButton = UIButton(type: .custom)
