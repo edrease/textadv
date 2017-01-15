@@ -16,7 +16,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var roomNameLabel: UILabel!
     @IBOutlet weak var infoTextLabel: UILabel!
     @IBOutlet weak var blinkingIndicatorLabel: UILabel!
-    @IBOutlet weak var roomUnderlineLabel: UILabel!
+    @IBOutlet weak var actionsRemainingView: UIView!
+    @IBOutlet weak var actionsRemainingLabel: UILabel!
     
     var tableView: UITableView = UITableView()
     
@@ -51,7 +52,8 @@ class ViewController: UIViewController {
     var player: Player!
     var items: [String] = []
     
-    var actionsRemaining: Int = 0
+    var actionsRemaining: Int = 5
+    var missionAccomplished: Bool = false
     
     //Placeholders for puzzles - can be used in a number of ways depending on the mission
     var numberOne: Int = 0
@@ -81,7 +83,7 @@ class ViewController: UIViewController {
         self.actionListView.layer.borderColor = self.appleIIcolor.cgColor
         
         //Add glow effect to INFO TEXT VIEW border
-        GlowEffect.addToViewBorder(view: self.infoTextView, color: self.appleIIcolor.cgColor)
+        //GlowEffect.addToViewBorder(view: self.infoTextView, color: self.appleIIcolor.cgColor)
         
         //Add glow effect to ACTION LIST VIEW border
         //GlowEffect.addToViewBorder(view: self.actionListView, color: self.appleIIcolor.cgColor)
@@ -96,7 +98,7 @@ class ViewController: UIViewController {
         GlowEffect.addToLabel(label: self.blinkingIndicatorLabel)
         
         //Add glow effect to room underline label
-        GlowEffect.addToLabel(label: self.roomUnderlineLabel)
+        //GlowEffect.addToLabel(label: self.roomUnderlineLabel)
         
         //Assign current mission and current array
         self.currentRoom = self.currentMission.initialRoom
@@ -125,6 +127,9 @@ class ViewController: UIViewController {
         self.player.items.append(player.gadget)
         self.player.items.append(player.statusEffectItem)
         self.player.items.append(player.disguise)
+        
+        self.actionsRemainingLabel.text = "Actions Remaining: \(self.actionsRemaining)"
+        GlowEffect.addToLabel(label: self.actionsRemainingLabel)
     }
 
     override func didReceiveMemoryWarning() {
@@ -169,15 +174,23 @@ class ViewController: UIViewController {
             }
         }
         
-        print("ACTION SELECTED \(actionText)")
-        
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
             self.actionSheetCounter = 0
             self.infoTextCounter = 1
+            self.actionsRemaining -= 1
+            
+            if self.actionsRemaining == 0 && self.missionAccomplished == false {
+                self.displayEndGameView()
+                return
+            }
+            
             self.actions = []
+            self.updateActionsRemainingLabel()
             self.toggleActionViewMask()
+            
         }
+        print(self.actionsRemaining)
     }
 
 //MARK: Helper functions
@@ -191,11 +204,8 @@ class ViewController: UIViewController {
         } else {
             self.infoTextLabel.text = self.currentArray[self.infoTextCounter]
             FontColorService.determineFontColor(inputString: self.infoTextLabel)
-            //TODO: Make sure string is correctly added
             self.missionLog.append(self.infoTextLabel.text!)
-            
             self.infoTextCounter += 1
-            print(self.infoTextCounter)
             self.toggleActionViewMask()
         }
         
@@ -218,7 +228,7 @@ class ViewController: UIViewController {
     func toggleActionViewMask() {
         if self.currentArray.count == self.infoTextCounter {
             self.actionViewMask.removeFromSuperview()
-            GlowEffect.addToViewBorder(view: self.actionListView, color: self.appleIIcolor.cgColor)
+            //GlowEffect.addToViewBorder(view: self.actionListView, color: self.appleIIcolor.cgColor)
         } else {
             self.actionListView.addSubview(self.actionViewMask)
             self.actionListView.layer.shadowOpacity = 0.0
@@ -226,7 +236,16 @@ class ViewController: UIViewController {
     }
     
     func logButtonPressed() {
-        print("LOG")
+        
+        self.actionsRemaining -= 1
+        
+        if actionsRemaining == 0 && self.missionAccomplished == false {
+            self.displayEndGameView()
+            return
+        }
+        
+        self.updateActionsRemainingLabel()
+        print(self.actionsRemaining)
         
         let backgroundView = UIView(frame: view.frame)
         backgroundView.tag = 100
@@ -389,7 +408,6 @@ class ViewController: UIViewController {
 //MARK: ACTION functions
     
     func observeButtonPressed() {
-        print("OBSERVE")
         self.currentActionCategory = "OBSERVED: "
         
         let subview = setupActionView(self.actionListView)
@@ -401,7 +419,6 @@ class ViewController: UIViewController {
     }
     
     func talkButtonPressed() {
-        print("TALK")
         self.currentActionCategory = "TALKED: "
         
         let subview = setupActionView(self.actionListView)
@@ -412,7 +429,6 @@ class ViewController: UIViewController {
     }
     
     func moveButtonPressed() {
-        print("MOVE")
         self.currentActionCategory = "MOVED: "
         
         let subview = setupActionView(self.actionListView)
@@ -423,7 +439,6 @@ class ViewController: UIViewController {
     }
     
     func interactButtonPressed() {
-        print("INTERACT")
         self.currentActionCategory = "INTERACTED: "
         
         let subview = setupActionView(self.actionListView)
@@ -434,7 +449,6 @@ class ViewController: UIViewController {
     }
     
     func attackButtonPressed() {
-        print("ATTACK")
         self.currentActionCategory = "ATTACKED: "
         
         let subview = setupActionView(self.actionListView)
@@ -445,7 +459,6 @@ class ViewController: UIViewController {
     }
     
     func itemButtonPressed() {
-        print("ITEM")
         self.currentActionCategory = "USED ITEM: "
         
         let subview = setupActionView(self.actionListView)
@@ -470,7 +483,7 @@ class ViewController: UIViewController {
         actionSubview.backgroundColor = UIColor.black
         actionSubview.center = center
         
-        GlowEffect.addToViewBorder(view: actionSubview, color: self.appleIIcolor.cgColor)
+        //GlowEffect.addToViewBorder(view: actionSubview, color: self.appleIIcolor.cgColor)
         
         //Create and place CANCEL button
         let cancelButton = UIButton(type: .custom)
@@ -497,7 +510,7 @@ class ViewController: UIViewController {
     
     //Dismiss ACTION view when CANCEL button is pressed
     func cancelButtonPressed() {
-        print("CANCEL")
+        
         if let viewWithTag = self.view.viewWithTag(99) {
             viewWithTag.removeFromSuperview()
             self.actionSheetCounter = 0
@@ -509,7 +522,6 @@ class ViewController: UIViewController {
     func nextButtonPressed() {
         //Show the next view in the array
         
-        print("NEXT")
         self.actionSheetCounter += 1
         
         if let viewWithTag = self.view.viewWithTag(99) {
@@ -556,13 +568,11 @@ class ViewController: UIViewController {
         
         var anchorButton: UIButton!
         var optionArrays = self.setupActionOptions(options)
-        print("Option arrays are \(optionArrays)")
         
         if self.actionSheetCounter == 0 && self.didReturnFromPrevButton == false {
             self.actions = optionArrays
         }
         
-        print("self.actions is\(self.actions)")
         for (index, option) in optionArrays[0].enumerated() {
             
             if index == 0 {
@@ -690,8 +700,6 @@ class ViewController: UIViewController {
     //Place "NEXT" button in action option view
     func placeNextButton(_ superview: UIView, actions: [[String]]) {
         
-        print("actions.count is \(actions.count)")
-        print("action sheet counter is \(self.actionSheetCounter)")
         
         if (actions.count - self.actionSheetCounter) > 1 {
         
@@ -739,6 +747,38 @@ class ViewController: UIViewController {
         superview.addConstraint(logButtonVerticalConstraint)
         superview.addConstraint(logButtonHorizontalConstraint)
     }
+    
+    //Update the ACTIONS REMAINING label
+    func updateActionsRemainingLabel() {
+        self.actionsRemainingLabel.text = "Actions Remaining: \(self.actionsRemaining)"
+    }
+    
+    func displayEndGameView() {
+        
+        let backgroundView = UIView(frame: view.frame)
+        backgroundView.backgroundColor = UIColor.black
+        
+        let gameOverLabel = UILabel()
+        gameOverLabel.text = "Game Over"
+        gameOverLabel.font = UIFont(name: Constants.regularAppleFont, size: 15.0)
+        gameOverLabel.sizeToFit()
+        gameOverLabel.textColor = UIColor.red
+        gameOverLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        GlowEffect.addToLabel(label: gameOverLabel)
+        
+        backgroundView.addSubview(gameOverLabel)
+        
+        let labelXConstraint = NSLayoutConstraint(item: gameOverLabel, attribute: .centerX, relatedBy: .equal, toItem: backgroundView, attribute: .centerX, multiplier: 1, constant: 0)
+        let labelYConstraint = NSLayoutConstraint(item: gameOverLabel, attribute: .centerY, relatedBy: .equal, toItem: backgroundView, attribute: .centerY, multiplier: 1, constant: 0)
+        
+        backgroundView.addConstraint(labelXConstraint)
+        backgroundView.addConstraint(labelYConstraint)
+        
+        self.view.addSubview(backgroundView)
+    
+    }
+    
 
 }
 
@@ -761,7 +801,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
-    
     
 }
 

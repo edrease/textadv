@@ -103,6 +103,13 @@ class ActionService {
         
     }
     
+    //ATTACK
+    
+    static func attackPorter(_ vc: ViewController) -> [String] {
+        vc.displayEndGameView()
+        return ["You shouldn't have done that..."]
+    }
+    
 
     var functions: [String : (ViewController) -> [String]] = [
         
@@ -120,5 +127,7 @@ class ActionService {
                                                               MissionOneConstants.kMoveSleepingCar2 : ActionService.moveSleepingCar2,
                                                               MissionOneConstants.kMoveObservationCar : ActionService.moveObservationCar,
                                     //TALK
-                                                              MissionOneConstants.kTalkTicketSeller : ActionService.talkTicketSeller]
+                                                              MissionOneConstants.kTalkTicketSeller : ActionService.talkTicketSeller,
+                                                              
+                                                              MissionOneConstants.kAttackPorter : ActionService.attackPorter]
 }
